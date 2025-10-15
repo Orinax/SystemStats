@@ -5,6 +5,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sysinfo.db'
 db = SQLAlchemy(app)
 
+
 class SystemInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     hostname = db.Column(db.String(120))
@@ -19,3 +20,29 @@ def create_tables():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    data = request.get_json(force=True)
+    sysinfo = SystemInfo(
+        hostname=data.get('hostname', ''),
+        os=data.get('distro', {}).get('name', '') + " " + data.get('distro', {}).get('version', ''),
+        cpu=data.get('cpu', {}).get('model', ''),
+        ram=str(data.get('memory', {}).get('total', '')),
+        raw_json=json.dumps(data)
+    )
+    db.session.add(sysinfo)
+    db.session.commit()
+    regurn jsonify({'status': 'success', 'id': sysinfo.id})
+
+@app.route('/list', methods=['GET'])
+def list_infos():
+    infos = SystemInfo.query.all()
+    return jsonify([{
+       'id': info.id,
+       'hostname': info.hostname,
+       'os': info.os,
+       'cpu': info.cpu,
+       'ram': info.ram,
+    } for info in infos])
+
+
+if __name__ == '__main__':
+    app.run(port=5000)
