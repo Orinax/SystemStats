@@ -14,7 +14,7 @@ class SystemInfo(db.Model):
     ram = db.Column(db.String(120))
     raw_json = db.Column(db.Text)
 
-@app.before_first_request
+@app.before_request
 def create_tables():
     db.create_all()
 
@@ -30,7 +30,7 @@ def submit():
     )
     db.session.add(sysinfo)
     db.session.commit()
-    regurn jsonify({'status': 'success', 'id': sysinfo.id})
+    return jsonify({'status': 'success', 'id': sysinfo.id})
 
 @app.route('/list', methods=['GET'])
 def list_infos():
