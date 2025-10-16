@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sysinfo.db'
@@ -8,21 +9,24 @@ db = SQLAlchemy(app)
 
 class SystemInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    hostname = db.Column(db.String(120))
     os = db.Column(db.String(120))
     cpu = db.Column(db.String(120))
     ram = db.Column(db.String(120))
     raw_json = db.Column(db.Text)
 
-@app.before_request
-def create_tables():
+# Create tables on startup
+with app.app_context():
     db.create_all()
 
 @app.route('/submit', methods=['POST'])
 def submit():
     data = request.get_json(force=True)
+
+    cpu_info = data.get('cpu', {})
+    memory_info = data.get('memory', {})
+    distro_info = data.get('distro', {})
+
     sysinfo = SystemInfo(
-        hostname=data.get('hostname', ''),
         os=data.get('distro', {}).get('name', '') + " " + data.get('distro', {}).get('version', ''),
         cpu=data.get('cpu', {}).get('model', ''),
         ram=str(data.get('memory', {}).get('total', '')),
@@ -37,7 +41,6 @@ def list_infos():
     infos = SystemInfo.query.all()
     return jsonify([{
        'id': info.id,
-       'hostname': info.hostname,
        'os': info.os,
        'cpu': info.cpu,
        'ram': info.ram,
