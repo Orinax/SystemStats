@@ -16,7 +16,6 @@ class SystemInfo(db.Model):
     graphics = db.Column(db.Text)
     machine = db.Column(db.Text)
     drives = db.Column(db.Text)
-    raw_json = db.Column(db.Text)
 
 # Create tables on startup
 with app.app_context():
@@ -36,10 +35,13 @@ def submit():
     drives_info = data.get('drives', {})
 
     sysinfo = SystemInfo(
-        os=data.get('distro', {}).get('name', '') + " " + data.get('distro', {}).get('version', ''),
-        cpu=data.get('cpu', {}).get('model', ''),
-        ram=str(data.get('memory', {}).get('total', '')),
-        raw_json=json.dumps(data)
+        system=json.dumps(system_info),
+        memory=json.dumps(memory_info),
+        network=json.dumps(network_info),
+        cpu=json.dumps(cpu_info),
+        graphics=json.dumps(graphics_info),
+        machine=json.dumps(machine_info),
+        drives=json.dumps(drives_info)
     )
     db.session.add(sysinfo)
     db.session.commit()
