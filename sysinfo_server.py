@@ -51,10 +51,14 @@ def submit():
 def list_infos():
     infos = SystemInfo.query.all()
     return jsonify([{
-       'id': info.id,
-       'os': info.os,
-       'cpu': info.cpu,
-       'ram': info.ram,
+        'id': info.id,
+        'system': info.system,
+        'memory': info.memory,
+        'network': info.network,
+        'cpu': info.cpu,
+        'graphics': info.graphics,
+        'machine': info.machine,
+        'drives': info.drives
     } for info in infos])
 
 
