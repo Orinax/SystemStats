@@ -27,9 +27,13 @@ with app.app_context():
 def submit():
     data = request.get_json(force=True)
 
-    cpu_info = data.get('cpu', {})
+    system_info = data.get('system', {})
     memory_info = data.get('memory', {})
-    distro_info = data.get('distro', {})
+    network_info = data.get('network', {})
+    cpu_info = data.get('cpu', {})
+    graphics_info = data.get('graphics', {})
+    machine_info = data.get('machine', {})
+    drives_info = data.get('drives', {})
 
     sysinfo = SystemInfo(
         os=data.get('distro', {}).get('name', '') + " " + data.get('distro', {}).get('version', ''),
