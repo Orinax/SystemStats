@@ -9,14 +9,19 @@ db = SQLAlchemy(app)
 
 class SystemInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    os = db.Column(db.String(120))
-    cpu = db.Column(db.String(120))
-    ram = db.Column(db.String(120))
+    system = db.Column(db.Text)
+    memory = db.Column(db.Text)
+    network = db.Column(db.Text)
+    cpu = db.Column(db.Text)
+    graphics = db.Column(db.Text)
+    machine = db.Column(db.Text)
+    drives = db.Column(db.Text)
     raw_json = db.Column(db.Text)
 
 # Create tables on startup
 with app.app_context():
     db.create_all()
+
 
 @app.route('/submit', methods=['POST'])
 def submit():
