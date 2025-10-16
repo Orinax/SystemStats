@@ -30,4 +30,4 @@ fi
 echo "System info collected successfully."
 
 python3 parse_inxi_files.py
-# curl -X POST -H "Content-Type: application/json" --data @/tmp/sysinfo.json http://localhost:5000/submit
+curl -X POST -H "Content-Type: application/json" --data @inxi_data.json http://localhost:5000/submit
