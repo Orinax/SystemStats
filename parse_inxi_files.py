@@ -33,6 +33,7 @@ def flat_parse_inxi(filename):
     return result
 
 
+system = flat_parse_inxi('/tmp/hardn_test_system.txt')
 memory = flat_parse_inxi('/tmp/hardn_test_memory.txt')
 network = flat_parse_inxi('/tmp/hardn_test_network.txt')
 cpu = flat_parse_inxi('/tmp/hardn_test_cpu.txt')
@@ -41,6 +42,7 @@ machine = flat_parse_inxi('/tmp/hardn_test_machine.txt')
 drives = flat_parse_inxi('/tmp/hardn_test_drives.txt')
 
 data = {
+        "system": system,
         "memory": memory,
         "network": network,
         "cpu": cpu,

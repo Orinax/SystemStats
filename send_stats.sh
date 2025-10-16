@@ -16,7 +16,8 @@ if ! command -v inxi >/dev/null 2>&1; then
 fi
 
 # Run inxi and push to server
-if ! (inxi -mz > /tmp/hardn_test_memory.txt &&
+if ! (inxi -Sz > /tmp/hardn_test_system.txt &&
+      inxi -mz > /tmp/hardn_test_memory.txt &&
       inxi -nz > /tmp/hardn_test_network.txt &&
       inxi -Cz > /tmp/hardn_test_cpu.txt &&
       inxi -Gz > /tmp/hardn_test_graphics.txt &&
